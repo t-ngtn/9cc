@@ -1,5 +1,5 @@
 CFLAGS=-std=c11 -g -static
-DOCKER=docker run --rm -v ~/myrepo/9cc:/9cc -w /9cc compilerbook
+DOCKER=docker run --rm -v ~/myrepo/9cc:/9cc -w /9cc --platform linux/amd64 compilerbook
 
 9cc: 9cc.c
 	$(DOCKER) cc -o $@ $< $(CFLAGS)
@@ -18,4 +18,4 @@ clean:
 
 
 
-.PHONY: _test test clean
+.PHONY: run _test test clean
