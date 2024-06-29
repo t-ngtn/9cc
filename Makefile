@@ -16,6 +16,4 @@ test:
 clean:
 	rm -f 9cc *.o *~ tmp*
 
-
-
 .PHONY: run _test test clean
