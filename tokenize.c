@@ -29,10 +29,17 @@ bool consume(char *op) {
   return true;
 }
 
+Token *consume_ident() {
+  if (token->kind != TK_IDENT) return NULL;
+  Token *tok = token;
+  token = token->next;
+  return tok;
+}
+
 void expect(char *op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
-    error_at(token->str, "'%c'ではありません", op);
+    error_at(token->str, "'%s'ではありません", op);
   token = token->next;
 }
 
@@ -74,8 +81,13 @@ Token *tokenize(char *p) {
       continue;
     }
 
-    if (strchr("+-*/()<>", *p)) {
+    if (strchr("+-*/()<>=;", *p)) {
       cur = new_token(TK_RESERVED, cur, p++, 1);
+      continue;
+    }
+
+    if ('a' <= *p && *p <= 'z') {
+      cur = new_token(TK_IDENT, cur, p++, 1);
       continue;
     }
 
