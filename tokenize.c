@@ -36,6 +36,12 @@ Token *consume_ident() {
   return tok;
 }
 
+bool consume_return() {
+  if (token->kind != TK_RETURN) return false;
+  token = token->next;
+  return true;
+}
+
 void expect(char *op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
@@ -89,6 +95,12 @@ Token *tokenize(char *p) {
 
     if (strchr("+-*/()<>=;", *p)) {
       cur = new_token(TK_RESERVED, cur, p++, 1);
+      continue;
+    }
+
+    if (strncmp(p, "return", 6) == 0 && !is_ident2(p[6])) {
+      cur = new_token(TK_RETURN, cur, p, 6);
+      p += 6;
       continue;
     }
 
