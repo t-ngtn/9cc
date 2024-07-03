@@ -36,8 +36,8 @@ Token *consume_ident() {
   return tok;
 }
 
-bool consume_return() {
-  if (token->kind != TK_RETURN) return false;
+bool consume_by_kind(TokenKind tk) {
+  if (token->kind != tk) return false;
   token = token->next;
   return true;
 }
@@ -101,6 +101,12 @@ Token *tokenize(char *p) {
     if (strncmp(p, "return", 6) == 0 && !is_ident2(p[6])) {
       cur = new_token(TK_RETURN, cur, p, 6);
       p += 6;
+      continue;
+    }
+
+    if (strncmp(p, "if", 2) == 0 && !is_ident2(p[2])) {
+      cur = new_token(TK_IF, cur, p, 2);
+      p += 2;
       continue;
     }
 

@@ -23,15 +23,23 @@ void program() {
 
 Node *stmt() {
   Node *node;
-  if (consume_return()) {
+  if (consume_by_kind(TK_RETURN)) {
     node = calloc(1, sizeof(Node));
     node->kind = ND_RETURN;
     node->lhs = expr();
+    expect(";");
+  } else if (consume_by_kind(TK_IF)) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_IF;
+    expect("(");
+    node->lhs = expr();
+    expect(")");
+    node->rhs = stmt();
   } else {
     node = expr();
+    expect(";");
   };
 
-  expect(";");
   return node;
 }
 
