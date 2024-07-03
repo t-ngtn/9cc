@@ -8,21 +8,12 @@ Node *new_node(NodeKind kind, Node *lhs, Node *rhs) {
   return node;
 }
 
-Node *new_node_val(Token *tok) {
-  Node *node = calloc(1, sizeof(Node));
-  node->kind = ND_LVAR;
-  node->offset = (tok->str[0] - 'a' + 1) * 8;
-  return node;
-}
-
 Node *new_node_num(int val) {
   Node *node = calloc(1, sizeof(Node));
   node->kind = ND_NUM;
   node->val = val;
   return node;
 }
-
-Node *code[100];
 
 void program() {
   int i = 0;
@@ -118,7 +109,31 @@ Node *primary() {
   }
 
   Token *tok = consume_ident();
-  if (tok) return new_node_val(tok);
+  if (tok) {
+    Node *node = calloc(1, sizeof(Node));
+    node->kind = ND_LVAR;
+
+    LVar *lvar = find_lvar(tok);
+    if (lvar) {
+      node->offset = lvar->offset;
+    } else {
+      lvar = calloc(1, sizeof(LVar));
+      lvar->next = locals;
+      lvar->name = tok->str;
+      lvar->len = tok->len;
+      lvar->offset = (locals) ? locals->offset + 8 : 8;
+      node->offset = lvar->offset;
+      locals = lvar;
+    }
+    return node;
+  };
 
   return new_node_num(expect_number());
+}
+
+LVar *find_lvar(Token *tok) {
+  for (LVar *var = locals; var; var = var->next)
+    if (var->len == tok->len && !memcmp(tok->str, var->name, var->len))
+      return var;
+  return NULL;
 }

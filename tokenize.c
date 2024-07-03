@@ -63,6 +63,12 @@ Token *new_token(TokenKind kind, Token *cur, char *str, int len) {
 
 bool startswitch(char *p, char *q) { return memcmp(p, q, strlen(q)) == 0; }
 
+bool is_ident1(char c) {
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_';
+}
+
+bool is_ident2(char c) { return is_ident1(c) || ('0' <= c && c <= '9'); }
+
 Token *tokenize(char *p) {
   Token head;
   head.next = NULL;
@@ -86,8 +92,10 @@ Token *tokenize(char *p) {
       continue;
     }
 
-    if ('a' <= *p && *p <= 'z') {
-      cur = new_token(TK_IDENT, cur, p++, 1);
+    if (is_ident1(*p)) {
+      char *q = p++;
+      while (is_ident2(*p)) p++;
+      cur = new_token(TK_IDENT, cur, q, p - q);
       continue;
     }
 
