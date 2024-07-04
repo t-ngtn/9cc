@@ -65,4 +65,8 @@ assert 5 'if (1 == 1) if (2 == 2) return 5; return 3;'
 assert 5 'if (1 == 1) return 5; else return 3;'
 assert 3 'if (1 == 2) return 5; else return 3;'
 
+assert 10 'for (i = 0; i < 10; i = i + 1) i; return i;'
+assert 11 'for (i = 0; i < 10; i = i + 1) i; return i + 1;'
+assert 20 'a=0; for (; a < 20; a = a + 1) a; return a;'
+
 echo OK

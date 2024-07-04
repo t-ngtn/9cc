@@ -29,6 +29,21 @@ void gen(Node *node) {
       if (node->els) gen(node->els);
       printf(".Lend%d:\n", tmp_jump_index);
       return;
+    case ND_FOR:
+      if (node->init) gen(node->init);
+      int tmp_jump_index2 = jump_index++;
+      printf(".Lbegin%d:\n", tmp_jump_index2);
+      if (node->cond) {
+        gen(node->cond);
+        printf("  pop rax\n");
+        printf("  cmp rax, 0\n");
+        printf("  je .Lend%d\n", tmp_jump_index2);
+      }
+      gen(node->then);
+      if (node->inc) gen(node->inc);
+      printf("  jmp .Lbegin%d\n", tmp_jump_index2);
+      printf(".Lend%d:\n", tmp_jump_index2);
+      return;
     case ND_NUM:
       printf("  push %d\n", node->val);
       return;
