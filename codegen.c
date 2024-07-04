@@ -18,12 +18,15 @@ void gen(Node *node) {
       printf("  ret\n ");
       return;
     case ND_IF:
-      gen(node->lhs);
+      gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       int tmp_jump_index = jump_index++;
-      printf("  je .Lend%d\n", tmp_jump_index);
-      gen(node->rhs);
+      printf("  je .Lelse%d\n", tmp_jump_index);
+      gen(node->then);
+      printf("  jmp .Lend%d\n", tmp_jump_index);
+      printf(".Lelse%d:\n", tmp_jump_index);
+      if (node->els) gen(node->els);
       printf(".Lend%d:\n", tmp_jump_index);
       return;
     case ND_NUM:

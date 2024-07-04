@@ -110,6 +110,12 @@ Token *tokenize(char *p) {
       continue;
     }
 
+    if (strncmp(p, "else", 4) == 0 && !is_ident2(p[4])) {
+      cur = new_token(TK_ELSE, cur, p, 4);
+      p += 4;
+      continue;
+    }
+
     if (is_ident1(*p)) {
       char *q = p++;
       while (is_ident2(*p)) p++;
