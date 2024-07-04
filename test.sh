@@ -69,4 +69,7 @@ assert 10 'for (i = 0; i < 10; i = i + 1) i; return i;'
 assert 11 'for (i = 0; i < 10; i = i + 1) i; return i + 1;'
 assert 20 'a=0; for (; a < 20; a = a + 1) a; return a;'
 
+assert 10 'i=0; while (i < 10) i = i+1; return i;'
+
+
 echo OK
