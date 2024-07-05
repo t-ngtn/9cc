@@ -60,6 +60,7 @@ typedef enum {
   ND_RETURN,  // return
   ND_IF,      // if
   ND_FOR,     // for or while
+  ND_BLOCK,   // { ... }
 } NodeKind;
 
 typedef struct Node Node;
@@ -74,8 +75,11 @@ struct Node {
   Node *els;   // else
   Node *inc;   // for
 
-  int val;     // ND_NUM
-  int offset;  // ND_LVAR
+  Node *body;  // block
+  Node *next;  // block
+
+  int val;     // num
+  int offset;  // lvar
 };
 
 Node *new_node(NodeKind kind, Node *lhs, Node *rhs);

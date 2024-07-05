@@ -44,6 +44,9 @@ void gen(Node *node) {
       printf("  jmp .Lbegin%d\n", tmp_jump_index2);
       printf(".Lend%d:\n", tmp_jump_index2);
       return;
+    case ND_BLOCK:
+      for (Node *n = node->body; n; n = n->next) gen(n);
+      return;
     case ND_NUM:
       printf("  push %d\n", node->val);
       return;

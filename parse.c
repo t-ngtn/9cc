@@ -68,6 +68,17 @@ Node *stmt() {
     node->cond = expr();
     expect(")");
     node->then = stmt();
+  } else if (consume("{")) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_BLOCK;
+    Node head;
+    head.next = NULL;
+    Node *cur = &head;
+    while (!consume("}")) {
+      cur->next = stmt();
+      cur = cur->next;
+    }
+    node->body = head.next;
   } else {
     node = expr();
     expect(";");
