@@ -171,13 +171,28 @@ Node *primary() {
   Token *tok = consume_ident();
   if (tok) {
     Node *node = calloc(1, sizeof(Node));
+
+    // func call
     if (consume("(")) {
       node->kind = ND_FUNCALL;
       node->funcname = strndup(tok->str, tok->len);
-      expect(")");
+      Node head;
+      head.next = NULL;
+      Node *cur = &head;
+      if (!consume(")")) {
+        cur->next = expr();
+        cur = cur->next;
+        while (consume(",")) {
+          cur->next = expr();
+          cur = cur->next;
+        }
+        expect(")");
+      }
+      node->args = head.next;
       return node;
     }
 
+    // local variable
     node->kind = ND_LVAR;
     LVar *lvar = find_lvar(tok);
     if (lvar) {

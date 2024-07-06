@@ -80,6 +80,7 @@ struct Node {
   Node *next;  // block
 
   char *funcname;  // funcall
+  Node *args;      // funcall
 
   int val;     // num
   int offset;  // lvar

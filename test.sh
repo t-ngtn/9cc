@@ -2,6 +2,11 @@
 cat <<EOF | gcc -xc -c -o tmp2.o -
 int ret3() { return 3; }
 int ret5() { return 5; }
+int plus2(int x, int y) { return x + y; }
+int plus3(int x, int y, int z) { return x + y + z; }
+int plus4(int x, int y, int z, int a) { return x + y + z + a; }
+int plus5(int x, int y, int z, int a, int b) { return x + y + z + a + b; }
+int plus6(int x, int y, int z, int a, int b, int c) { return x + y + z + a + b + c; }
 EOF
 
 assert() {
@@ -80,5 +85,10 @@ assert 3 '{ {1; {2;} return 3;}}'
 
 assert 3 '{ return ret3(); }'
 assert 5 '{ return ret5(); }'
+assert 8 '{ return plus2(3, 5); }'
+assert 12 '{ return plus3(3, 4, 5); }'
+assert 15 '{ return plus4(3, 4, 5, 3); }'
+assert 21 '{ return plus5(3, 4, 5, 3, 6); }'
+assert 6 '{ return plus6(1, 1, 1, 1, 1, 1); }'
 
 echo OK
