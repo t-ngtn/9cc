@@ -7,6 +7,7 @@ int plus3(int x, int y, int z) { return x + y + z; }
 int plus4(int x, int y, int z, int a) { return x + y + z + a; }
 int plus5(int x, int y, int z, int a, int b) { return x + y + z + a + b; }
 int plus6(int x, int y, int z, int a, int b, int c) { return x + y + z + a + b + c; }
+int minus(int x, int y) { return x - y; }
 EOF
 
 assert() {
@@ -90,5 +91,7 @@ assert 12 '{ return plus3(3, 4, 5); }'
 assert 15 '{ return plus4(3, 4, 5, 3); }'
 assert 21 '{ return plus5(3, 4, 5, 3, 6); }'
 assert 6 '{ return plus6(1, 1, 1, 1, 1, 1); }'
+assert 136 '{return plus6(1, 2, plus6(3, plus6(4, 5, 6, 7, 8, 9), 10, 11, 12, 13), 14, 15, 16); }'
+assert 2 '{ return minus(5, 3); }'
 
 echo OK
