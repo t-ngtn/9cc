@@ -46,21 +46,22 @@ extern char *user_input;
 
 // parse.c
 typedef enum {
-  ND_ADD,     // +
-  ND_SUB,     // -
-  ND_MUL,     // *
-  ND_DIV,     // /
-  ND_EQ,      // ==
-  ND_NE,      // !=
-  ND_LT,      // <
-  ND_LE,      // <=
-  ND_ASSIGN,  // =
-  ND_LVAR,    // local variable
-  ND_NUM,     // Integer
-  ND_RETURN,  // return
-  ND_IF,      // if
-  ND_FOR,     // for or while
-  ND_BLOCK,   // { ... }
+  ND_ADD,      // +
+  ND_SUB,      // -
+  ND_MUL,      // *
+  ND_DIV,      // /
+  ND_EQ,       // ==
+  ND_NE,       // !=
+  ND_LT,       // <
+  ND_LE,       // <=
+  ND_ASSIGN,   // =
+  ND_LVAR,     // local variable
+  ND_NUM,      // Integer
+  ND_RETURN,   // return
+  ND_IF,       // if
+  ND_FOR,      // for or while
+  ND_BLOCK,    // { ... }
+  ND_FUNCALL,  // function call
 } NodeKind;
 
 typedef struct Node Node;
@@ -77,6 +78,8 @@ struct Node {
 
   Node *body;  // block
   Node *next;  // block
+
+  char *funcname;  // funcall
 
   int val;     // num
   int offset;  // lvar
@@ -106,6 +109,7 @@ struct LVar {
   int offset;  // RBPからのオフセット
 };
 LVar *find_lvar(Token *tok);
+char *strndup(const char *s, size_t n);
 
 // codegen.c
 void gen(Node *node);
